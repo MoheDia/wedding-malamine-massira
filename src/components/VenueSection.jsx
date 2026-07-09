@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-function useReveal() {
+function useReveal(hasFull) {
   const refs = useRef([])
 
   useEffect(() => {
@@ -8,15 +8,15 @@ function useReveal() {
       entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view') }),
       { threshold: .15 }
     )
-    refs.current.forEach(el => el && obs.observe(el))
+    refs.current.filter(Boolean).forEach(el => obs.observe(el))
     return () => obs.disconnect()
-  }, [])
+  }, [hasFull])
 
   return el => { if (el && !refs.current.includes(el)) refs.current.push(el) }
 }
 
 export default function VenueSection({ hasFull }) {
-  const addRef = useReveal()
+  const addRef = useReveal(hasFull)
 
   return (
     <section className="venues-section">

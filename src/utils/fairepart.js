@@ -1,4 +1,11 @@
-export function generateFairePart(hasFull) {
+async function ensureFonts() {
+  // Les fonts Google sont déjà dans le HTML — on attend qu'elles soient prêtes
+  await document.fonts.ready
+}
+
+export async function generateFairePart(hasFull) {
+  await ensureFonts()
+
   const W = 1200
   const H = hasFull ? 1640 : 1040
   const canvas = document.createElement('canvas')
@@ -44,13 +51,12 @@ export function generateFairePart(hasFull) {
   ctx.lineWidth = 1.5
   ctx.beginPath(); ctx.moveTo(120, 130); ctx.lineTo(W - 120, 130); ctx.stroke()
 
+  ctx.textAlign = 'center'
+
   // Chip
   ctx.fillStyle = '#C2768A'
   ctx.font = '600 22px "Lato", sans-serif'
-  ctx.textAlign = 'center'
-  ctx.letterSpacing = '0.45em'
   ctx.fillText('SAVE THE DATE', W / 2, 180)
-  ctx.letterSpacing = '0'
 
   // Rope separator
   ctx.fillStyle = 'rgba(181,137,12,0.5)'
@@ -77,16 +83,13 @@ export function generateFairePart(hasFull) {
 
   ctx.fillStyle = '#2E1420'
   ctx.font = '300 32px "Lato", sans-serif'
-  ctx.letterSpacing = '0.35em'
   ctx.fillText('SAMEDI  3  OCTOBRE  2026', W / 2, 657)
-  ctx.letterSpacing = '0'
 
   // Gold rule mid
   ctx.strokeStyle = grd
   ctx.lineWidth = 1
   ctx.beginPath(); ctx.moveTo(120, 730); ctx.lineTo(W - 120, 730); ctx.stroke()
 
-  // Event cards
   if (hasFull) {
     drawEventCard(ctx, W, 760, '#C2768A', '✿', 'Mairie', '14h30 — Parc du Souvenir Emile Fouchard', '77500 Chelles')
     drawEventCard(ctx, W, 1020, '#D4AF37', '♥', 'Cérémonie', '19h00 — La Bella', '16 Rue de Pontault, 77680 Roissy-en-Brie')
@@ -116,7 +119,6 @@ export function generateFairePart(hasFull) {
 }
 
 function drawEventCard(ctx, W, y, color, icon, label, line1, line2) {
-  // Card bg
   ctx.save()
   ctx.fillStyle = 'rgba(255,255,255,0.7)'
   roundRect(ctx, 110, y, W - 220, 210, 20)
@@ -126,7 +128,6 @@ function drawEventCard(ctx, W, y, color, icon, label, line1, line2) {
   ctx.stroke()
   ctx.restore()
 
-  // Top accent line
   const lineGrd = ctx.createLinearGradient(200, 0, W - 200, 0)
   lineGrd.addColorStop(0, 'transparent')
   lineGrd.addColorStop(0.5, color)
@@ -142,9 +143,7 @@ function drawEventCard(ctx, W, y, color, icon, label, line1, line2) {
 
   ctx.fillStyle = color
   ctx.font = '600 26px "Lato", sans-serif'
-  ctx.letterSpacing = '0.3em'
   ctx.fillText(label.toUpperCase(), W / 2, y + 108)
-  ctx.letterSpacing = '0'
 
   ctx.fillStyle = 'rgba(46,20,32,0.75)'
   ctx.font = '300 30px "Lato", sans-serif'

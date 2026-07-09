@@ -21,8 +21,17 @@ function isRateLimited(ip) {
   return false;
 }
 
+function parseCookies(header) {
+  const cookies = {};
+  if (!header) return cookies;
+  header.split(';').forEach(c => {
+    const [k, ...v] = c.trim().split('=');
+    if (k) cookies[k.trim()] = v.join('=').trim();
+  });
+  return cookies;
+}
+
 module.exports = async function handler(req, res) {
-  // CORS headers (requêtes depuis le même domaine Vercel)
   res.setHeader('Content-Type', 'application/json');
 
   if (req.method !== 'POST') {
@@ -43,7 +52,6 @@ module.exports = async function handler(req, res) {
 
   const normalised = code.trim().toLowerCase();
 
-  // Correspondance des codes (depuis les variables d'environnement)
   const CODES = {
     [process.env.CODE_CEREMONY]: 'ceremony',
     [process.env.CODE_FULL]:     'full',
@@ -51,18 +59,29 @@ module.exports = async function handler(req, res) {
 
   const level = CODES[normalised];
   if (!level) {
-    // Délai artificiel pour ralentir le brute-force
     await new Promise(r => setTimeout(r, 400 + Math.random() * 200));
     return res.status(401).json({ error: 'Code invalide' });
   }
 
-  // Signature JWT côté serveur — le secret ne quitte jamais le serveur
   const secret = process.env.JWT_SECRET;
   if (!secret) {
     console.error('JWT_SECRET manquant dans les variables d\'environnement');
     return res.status(500).json({ error: 'Erreur de configuration serveur' });
   }
 
-  const token = jwt.sign({ level }, secret, { expiresIn: '30d' });
-  return res.status(200).json({ token });
+  const token = jwt.sign({ level }, secret, { expiresIn: '7d' });
+
+  // Cookie httpOnly — jamais accessible au JS client
+  const isSecure  = process.env.VERCEL === '1';
+  const cookieParts = [
+    `wdg_token=${token}`,
+    'HttpOnly',
+    isSecure ? 'Secure' : '',
+    'SameSite=Strict',
+    `Max-Age=${7 * 24 * 3600}`,
+    'Path=/',
+  ].filter(Boolean).join('; ');
+
+  res.setHeader('Set-Cookie', cookieParts);
+  return res.status(200).json({ ok: true });
 };

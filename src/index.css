@@ -32,7 +32,7 @@ body {
 .orb {
   position:absolute; border-radius:50%;
   pointer-events:none; z-index:0;
-  filter:blur(70px);
+  filter:blur(70px); will-change:transform;
 }
 .orb-a {
   width:520px; height:520px;
@@ -344,6 +344,7 @@ footer .f-names {
   z-index:1000; display:flex; align-items:center; justify-content:center;
   animation:fadeIn .5s ease both;
   transition:opacity .55s ease;
+  will-change:opacity;
 }
 .popup-overlay.closing      { opacity:0; }
 .popup-overlay.fast-closing { opacity:0; transition-duration:.28s; }
@@ -355,6 +356,7 @@ footer .f-names {
   position:relative;
   box-shadow:0 32px 80px rgba(46,20,32,.2),0 4px 16px rgba(46,20,32,.06),inset 0 1px 0 rgba(255,255,255,.9);
   animation:popIn .7s cubic-bezier(.175,.885,.32,1.275) both;
+  will-change:transform, opacity;
 }
 .popup-card::before {
   content:''; position:absolute; inset:14px;

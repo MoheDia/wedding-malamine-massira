@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
-const PETALS  = 22
-const SPARKS  = 30
+const PETALS = 22
+const SPARKS = 30
 
 function rand(min, max) { return min + Math.random() * (max - min) }
 
@@ -32,13 +32,14 @@ function createSpark(W, H) {
 }
 
 export default function PetalCanvas() {
-  const ref = useRef(null)
+  const canvasRef = useRef(null)
+  const rafRef    = useRef(null)
 
   useEffect(() => {
-    const canvas = ref.current
+    const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
-    let W, H, petals, sparks, raf
+    let W, H, petals, sparks
 
     function resize() {
       W = canvas.width  = window.innerWidth
@@ -89,21 +90,25 @@ export default function PetalCanvas() {
         s.x += s.vx; s.y += s.vy
       }
 
-      raf = requestAnimationFrame(draw)
+      rafRef.current = requestAnimationFrame(draw)
     }
 
     window.addEventListener('resize', resize)
     resize()
     draw()
-    return () => { cancelAnimationFrame(raf); window.removeEventListener('resize', resize) }
+
+    return () => {
+      cancelAnimationFrame(rafRef.current)
+      window.removeEventListener('resize', resize)
+    }
   }, [])
 
   return (
     <canvas
-      ref={ref}
+      ref={canvasRef}
       style={{
         position: 'fixed', inset: 0, pointerEvents: 'none',
-        zIndex: 0, opacity: .55,
+        zIndex: 0, opacity: .55, willChange: 'transform',
       }}
     />
   )

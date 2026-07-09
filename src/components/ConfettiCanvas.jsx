@@ -17,8 +17,10 @@ function mkConfetto(W) {
   }
 }
 
-export default function ConfettiCanvas({ duration = 3500 }) {
-  const ref = useRef(null)
+export default function ConfettiCanvas({ duration = 3500, onDone }) {
+  const ref    = useRef(null)
+  const onDoneRef = useRef(onDone)
+  onDoneRef.current = onDone
 
   useEffect(() => {
     const canvas = ref.current
@@ -49,11 +51,14 @@ export default function ConfettiCanvas({ duration = 3500 }) {
         if (p.y > H + 20 || p.alpha <= 0) Object.assign(p, mkConfetto(W))
       }
 
-      if (elapsed < duration + 400) raf = requestAnimationFrame(draw)
-      else canvas.style.display = 'none'
+      if (elapsed < duration + 400) {
+        raf = requestAnimationFrame(draw)
+      } else {
+        onDoneRef.current?.()
+      }
     }
 
-    draw()
+    raf = requestAnimationFrame(draw)
     return () => cancelAnimationFrame(raf)
   }, [duration])
 

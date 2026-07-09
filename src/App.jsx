@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 
 import { useAccess }     from './hooks/useAccess.js'
@@ -15,10 +15,15 @@ import FairePartSection from './components/FairePartSection.jsx'
 import ThankYou         from './components/ThankYou.jsx'
 import Footer           from './components/Footer.jsx'
 
-function CountdownPortal({ hasFull, mairsieStatus }) {
+// Isolé pour que le tick 1s ne re-rende pas App
+function AllDoneGate() {
+  const { status } = useCountdown('ceremony')
+  return status === 'past' ? <ThankYou /> : null
+}
+
+function CountdownPortal({ hasFull }) {
   const el = document.getElementById('countdowns')
   if (!el) return null
-
   return createPortal(
     <>
       {hasFull && (
@@ -46,48 +51,37 @@ function CountdownPortal({ hasFull, mairsieStatus }) {
 
 export default function App() {
   const { hasCeremony, hasFull, loading, error, setError, submitCode } = useAccess()
-  const [showPopup,   setShowPopup]   = useState(!hasCeremony)
-  const [burst,       setBurst]       = useState(false)
-  const [confetti,    setConfetti]    = useState(false)
-  const [freshUnlock, setFreshUnlock] = useState(false)
-  const prevFullRef = useRef(hasFull)
+  const [showPopup, setShowPopup] = useState(true)
+  const [burst,     setBurst]     = useState(false)
+  const [confetti,  setConfetti]  = useState(false)
 
-  const ceremonyStatus = useCountdown('ceremony').status
-  const allDone        = ceremonyStatus === 'past'
+  // Ferme le popup dès que la session est restaurée (cookie valide au montage)
+  // useAccess met loading=false après la vérification initiale
+  if (!loading && hasCeremony && showPopup) setShowPopup(false)
 
-  // When user submits a valid code
-  async function handleSuccess(level) {
-    setBurst(true)
-    setConfetti(true)
-    setFreshUnlock(true)
-    setShowPopup(false)
-  }
+  const handleBurstDone   = useCallback(() => setBurst(false),   [])
+  const handleConfettiDone = useCallback(() => setConfetti(false), [])
 
-  // Called from Popup — forwards to submitCode and triggers celebration on success
   async function handleSubmit(rawCode) {
     const level = await submitCode(rawCode)
-    if (level) await handleSuccess(level)
+    if (level) {
+      setShowPopup(false)
+      setBurst(true)
+      setConfetti(true)
+    }
     return level
   }
-
-  // If already had full access before and now gets fresh upgrade, show burst
-  useEffect(() => {
-    if (hasFull && !prevFullRef.current && !freshUnlock) {
-      setBurst(true); setConfetti(true)
-    }
-    prevFullRef.current = hasFull
-  }, [hasFull, freshUnlock])
 
   return (
     <>
       <PetalCanvas />
 
-      {burst    && <BurstCanvas   onComplete={() => setBurst(false)} />}
-      {confetti && <ConfettiCanvas duration={3200} />}
+      {burst    && <BurstCanvas    onComplete={handleBurstDone} />}
+      {confetti && <ConfettiCanvas duration={3200} onDone={handleConfettiDone} />}
 
-      {showPopup && (
+      {showPopup && !loading && (
         <Popup
-          onSuccess={handleSuccess}
+          onSuccess={() => {}}
           loading={loading}
           error={error}
           setError={setError}
@@ -99,7 +93,7 @@ export default function App() {
         <Hero />
         <CountdownPortal hasFull={hasFull} />
 
-        {allDone && <ThankYou />}
+        <AllDoneGate />
 
         <VenueSection     hasFull={hasFull} />
         <FairePartSection hasFull={hasFull} />

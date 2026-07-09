@@ -310,9 +310,16 @@ body {
 
 /* ══ FAIRE-PART ═══════════════════════════════════════════ */
 .fp-section {
-  background:var(--blush); text-align:center; padding:96px 24px;
+  position:relative; text-align:center; padding:96px 24px;
+  background:#fff url('/images/wedding-bg.jpg') center center / cover no-repeat;
   border-top:1px solid rgba(194,118,138,.12);
+  overflow:hidden;
 }
+.fp-section::before {
+  content:''; position:absolute; inset:0;
+  background:rgba(255,255,255,0.86);
+}
+.fp-section > * { position:relative; z-index:1; }
 .fp-btn {
   display:inline-flex; align-items:center; gap:14px; padding:18px 48px;
   background:linear-gradient(135deg,var(--rose) 0%,var(--rose-deep) 100%);
@@ -339,10 +346,9 @@ footer .f-names {
 /* ══ POPUP ═══════════════════════════════════════════════ */
 .popup-overlay {
   position:fixed; inset:0;
-  background:rgba(46,20,32,.6);
-  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  background:#fff url('/images/wedding-bg.jpg') center center / cover no-repeat;
   z-index:1000; display:flex; align-items:center; justify-content:center;
-  animation:fadeIn .5s ease both;
+  animation:fadeIn .6s ease both;
   transition:opacity .55s ease;
   will-change:opacity;
 }
@@ -350,13 +356,14 @@ footer .f-names {
 .popup-overlay.fast-closing { opacity:0; transition-duration:.28s; }
 
 .popup-card {
-  background:linear-gradient(150deg,#FFFCF8 0%,#FEF5EE 100%);
-  border:1px solid rgba(181,137,12,.25); border-radius:32px;
+  background:rgba(255,255,255,0.94);
+  border:1px solid rgba(181,137,12,.22); border-radius:32px;
   padding:56px 48px; max-width:460px; width:92%; text-align:center;
   position:relative;
-  box-shadow:0 32px 80px rgba(46,20,32,.2),0 4px 16px rgba(46,20,32,.06),inset 0 1px 0 rgba(255,255,255,.9);
+  box-shadow:0 24px 80px rgba(46,20,32,.14),0 4px 20px rgba(46,20,32,.06),inset 0 1px 0 rgba(255,255,255,1);
   animation:popIn .7s cubic-bezier(.175,.885,.32,1.275) both;
   will-change:transform, opacity;
+  backdrop-filter:blur(2px); -webkit-backdrop-filter:blur(2px);
 }
 .popup-card::before {
   content:''; position:absolute; inset:14px;

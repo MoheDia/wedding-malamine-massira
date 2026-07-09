@@ -7,7 +7,7 @@ export async function generateFairePart(hasFull) {
   await ensureFonts()
 
   const W = 1200
-  const H = hasFull ? 1700 : 1100
+  const H = hasFull ? 1700 : 1180
   const canvas = document.createElement('canvas')
   canvas.width  = W
   canvas.height = H

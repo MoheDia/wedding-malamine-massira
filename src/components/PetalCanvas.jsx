@@ -31,9 +31,11 @@ function createSpark(W, H) {
   }
 }
 
-export default function PetalCanvas() {
+export default function PetalCanvas({ paused = false }) {
   const canvasRef = useRef(null)
   const rafRef    = useRef(null)
+  const pausedRef = useRef(paused)
+  pausedRef.current = paused
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -69,6 +71,8 @@ export default function PetalCanvas() {
     }
 
     function draw() {
+      if (pausedRef.current) { rafRef.current = requestAnimationFrame(draw); return }
+
       ctx.clearRect(0, 0, W, H)
 
       for (const p of petals) {

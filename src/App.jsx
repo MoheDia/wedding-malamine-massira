@@ -74,7 +74,7 @@ export default function App() {
 
   return (
     <>
-      <PetalCanvas />
+      <PetalCanvas paused={showPopup} />
 
       {burst    && <BurstCanvas    onComplete={handleBurstDone} />}
       {confetti && <ConfettiCanvas duration={3200} onDone={handleConfettiDone} />}

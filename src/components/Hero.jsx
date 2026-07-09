@@ -5,7 +5,7 @@ export default function Hero() {
       {/* ── Noms — pleine largeur, en haut ── */}
       <div className="hero-names">
         <div className="hero-chip">
-          <span>SAMAKÉ  ✦  DIATTA</span>
+          <span>DIATTA  ✦  SAMAKÉ</span>
         </div>
 
         <div className="names-block">

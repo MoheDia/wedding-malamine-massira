@@ -86,7 +86,7 @@ body {
   text-shadow:0 4px 40px rgba(181,137,12,.13);
   display:block;
 }
-.hero-name.bride  { color:var(--rose-deep); }
+.hero-name.bride  { color:var(--gold); }
 .hero-name.groom  { color:var(--gold); }
 .hero-et {
   font-family:'Cormorant Garamond',serif;

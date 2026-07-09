@@ -7,7 +7,7 @@ export async function generateFairePart(hasFull) {
   await ensureFonts()
 
   const W = 1200
-  const H = hasFull ? 1640 : 1040
+  const H = hasFull ? 1700 : 1100
   const canvas = document.createElement('canvas')
   canvas.width  = W
   canvas.height = H
@@ -91,10 +91,10 @@ export async function generateFairePart(hasFull) {
   ctx.beginPath(); ctx.moveTo(120, 730); ctx.lineTo(W - 120, 730); ctx.stroke()
 
   if (hasFull) {
-    drawEventCard(ctx, W, 760, '#C2768A', '✿', 'Mairie', '14h30 — Parc du Souvenir Emile Fouchard', '77500 Chelles')
-    drawEventCard(ctx, W, 1020, '#D4AF37', '♥', 'Cérémonie', '19h00 — La Bella', '16 Rue de Pontault, 77680 Roissy-en-Brie')
+    drawEventCard(ctx, W, 760,  '#C2768A', '✿', 'Mairie',    '14h30 — Parc du Souvenir Emile Fouchard', '77500 Chelles')
+    drawEventCard(ctx, W, 1040, '#D4AF37', '♥', 'Cérémonie', '19h00 — La Bella', '16 Rue de Pontault, 77680 Roissy-en-Brie')
   } else {
-    drawEventCard(ctx, W, 760, '#D4AF37', '♥', 'Cérémonie', '19h00 — La Bella', '16 Rue de Pontault, 77680 Roissy-en-Brie')
+    drawEventCard(ctx, W, 760,  '#D4AF37', '♥', 'Cérémonie', '19h00 — La Bella', '16 Rue de Pontault, 77680 Roissy-en-Brie')
   }
 
   // Footer
@@ -119,9 +119,11 @@ export async function generateFairePart(hasFull) {
 }
 
 function drawEventCard(ctx, W, y, color, icon, label, line1, line2) {
+  const CARD_H = 250
+
   ctx.save()
   ctx.fillStyle = 'rgba(255,255,255,0.7)'
-  roundRect(ctx, 110, y, W - 220, 210, 20)
+  roundRect(ctx, 110, y, W - 220, CARD_H, 20)
   ctx.fill()
   ctx.strokeStyle = color + '55'
   ctx.lineWidth = 1.5
@@ -137,21 +139,31 @@ function drawEventCard(ctx, W, y, color, icon, label, line1, line2) {
   ctx.beginPath(); ctx.moveTo(200, y + 2); ctx.lineTo(W - 200, y + 2); ctx.stroke()
 
   ctx.textAlign = 'center'
+
+  // Icône
   ctx.fillStyle = color
-  ctx.font = '40px serif'
-  ctx.fillText(icon, W / 2, y + 62)
+  ctx.font = '38px serif'
+  ctx.fillText(icon, W / 2, y + 58)
 
+  // Label événement
   ctx.fillStyle = color
-  ctx.font = '600 26px "Lato", sans-serif'
-  ctx.fillText(label.toUpperCase(), W / 2, y + 108)
+  ctx.font = '600 24px "Lato", sans-serif'
+  ctx.fillText(label.toUpperCase(), W / 2, y + 100)
 
-  ctx.fillStyle = 'rgba(46,20,32,0.75)'
-  ctx.font = '300 30px "Lato", sans-serif'
-  ctx.fillText(line1, W / 2, y + 148)
+  // Séparateur fin sous le label
+  ctx.strokeStyle = color + '44'
+  ctx.lineWidth = 1
+  ctx.beginPath(); ctx.moveTo(W/2 - 80, y + 116); ctx.lineTo(W/2 + 80, y + 116); ctx.stroke()
 
-  ctx.fillStyle = 'rgba(122,72,88,0.7)'
-  ctx.font = 'italic 26px "Cormorant Garamond", Georgia, serif'
-  ctx.fillText(line2, W / 2, y + 185)
+  // line1 — horaire + lieu principal
+  ctx.fillStyle = 'rgba(46,20,32,0.78)'
+  ctx.font = '300 28px "Lato", sans-serif'
+  ctx.fillText(line1, W / 2, y + 160)
+
+  // line2 — adresse
+  ctx.fillStyle = 'rgba(122,72,88,0.72)'
+  ctx.font = 'italic 24px "Cormorant Garamond", Georgia, serif'
+  ctx.fillText(line2, W / 2, y + 200)
 }
 
 function roundRect(ctx, x, y, w, h, r) {

@@ -150,14 +150,14 @@ function drawEventCard(ctx, W, y, color, icon, label, line1, line2) {
   ctx.textAlign = 'center'
 
   // Icône — image ou emoji
+  let shift = 0  // décalage vertical du texte quand icon = image
   if (icon && typeof icon === 'object') {
-    const size = 68
-    const ix = W / 2 - size / 2
-    const iy = y + 18
+    const size = 62
     ctx.save()
     ctx.globalCompositeOperation = 'multiply'
-    ctx.drawImage(icon, ix, iy, size, size)
+    ctx.drawImage(icon, W / 2 - size / 2, y + 14, size, size)
     ctx.restore()
+    shift = 20  // l'image descend jusqu'à y+76, on pousse le texte de 20px
   } else {
     ctx.fillStyle = color
     ctx.font = '38px serif'
@@ -167,22 +167,22 @@ function drawEventCard(ctx, W, y, color, icon, label, line1, line2) {
   // Label événement
   ctx.fillStyle = color
   ctx.font = '600 24px "Lato", sans-serif'
-  ctx.fillText(label.toUpperCase(), W / 2, y + 100)
+  ctx.fillText(label.toUpperCase(), W / 2, y + 100 + shift)
 
   // Séparateur fin sous le label
   ctx.strokeStyle = color + '44'
   ctx.lineWidth = 1
-  ctx.beginPath(); ctx.moveTo(W/2 - 80, y + 116); ctx.lineTo(W/2 + 80, y + 116); ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(W/2 - 80, y + 116 + shift); ctx.lineTo(W/2 + 80, y + 116 + shift); ctx.stroke()
 
   // line1 — horaire + lieu principal
   ctx.fillStyle = 'rgba(46,20,32,0.78)'
   ctx.font = '300 28px "Lato", sans-serif'
-  ctx.fillText(line1, W / 2, y + 160)
+  ctx.fillText(line1, W / 2, y + 160 + shift)
 
   // line2 — adresse
   ctx.fillStyle = 'rgba(122,72,88,0.72)'
   ctx.font = 'italic 24px "Cormorant Garamond", Georgia, serif'
-  ctx.fillText(line2, W / 2, y + 200)
+  ctx.fillText(line2, W / 2, y + 200 + shift)
 }
 
 function roundRect(ctx, x, y, w, h, r) {

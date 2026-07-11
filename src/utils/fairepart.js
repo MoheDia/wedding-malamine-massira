@@ -1,10 +1,19 @@
 async function ensureFonts() {
-  // Les fonts Google sont déjà dans le HTML — on attend qu'elles soient prêtes
   await document.fonts.ready
+}
+
+function loadImage(src) {
+  return new Promise(resolve => {
+    const img = new Image()
+    img.onload  = () => resolve(img)
+    img.onerror = () => resolve(null)
+    img.src = src
+  })
 }
 
 export async function generateFairePart(hasFull) {
   await ensureFonts()
+  const danceImg = await loadImage('/images/dance.jpg')
 
   const W = 1200
   const H = hasFull ? 1700 : 1180
@@ -91,10 +100,10 @@ export async function generateFairePart(hasFull) {
   ctx.beginPath(); ctx.moveTo(120, 730); ctx.lineTo(W - 120, 730); ctx.stroke()
 
   if (hasFull) {
-    drawEventCard(ctx, W, 760,  '#C2768A', '✿', 'Mairie',    '14h30 — Parc du Souvenir Emile Fouchard', '77500 Chelles')
-    drawEventCard(ctx, W, 1040, '#D4AF37', '♥', 'Cérémonie', '17h00 — La Bella', '16 Rue de Pontault, 77680 Roissy-en-Brie')
+    drawEventCard(ctx, W, 760,  '#C2768A', '💍', 'Mairie',    '14h30 — Parc du Souvenir Emile Fouchard', '77500 Chelles')
+    drawEventCard(ctx, W, 1040, '#D4AF37', danceImg, 'Cérémonie', '17h00 — La Bella', '16 Rue de Pontault, 77680 Roissy-en-Brie')
   } else {
-    drawEventCard(ctx, W, 760,  '#D4AF37', '♥', 'Cérémonie', '17h00 — La Bella', '16 Rue de Pontault, 77680 Roissy-en-Brie')
+    drawEventCard(ctx, W, 760,  '#D4AF37', danceImg, 'Cérémonie', '17h00 — La Bella', '16 Rue de Pontault, 77680 Roissy-en-Brie')
   }
 
   // Footer
@@ -140,10 +149,20 @@ function drawEventCard(ctx, W, y, color, icon, label, line1, line2) {
 
   ctx.textAlign = 'center'
 
-  // Icône
-  ctx.fillStyle = color
-  ctx.font = '38px serif'
-  ctx.fillText(icon, W / 2, y + 58)
+  // Icône — image ou emoji
+  if (icon && typeof icon === 'object') {
+    const size = 68
+    const ix = W / 2 - size / 2
+    const iy = y + 18
+    ctx.save()
+    ctx.globalCompositeOperation = 'multiply'
+    ctx.drawImage(icon, ix, iy, size, size)
+    ctx.restore()
+  } else {
+    ctx.fillStyle = color
+    ctx.font = '38px serif'
+    ctx.fillText(icon, W / 2, y + 58)
+  }
 
   // Label événement
   ctx.fillStyle = color

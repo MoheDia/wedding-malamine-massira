@@ -40,7 +40,7 @@ function CountdownPortal({ hasFull }) {
         eventKey="ceremony"
         icon="💍"
         label="Cérémonie & Réception"
-        time="19h00"
+        time="17h00"
         address="La Bella — 16 Rue de Pontault, 77680 Roissy-en-Brie"
         isMairie={false}
       />

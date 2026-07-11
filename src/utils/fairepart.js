@@ -92,9 +92,9 @@ export async function generateFairePart(hasFull) {
 
   if (hasFull) {
     drawEventCard(ctx, W, 760,  '#C2768A', '✿', 'Mairie',    '14h30 — Parc du Souvenir Emile Fouchard', '77500 Chelles')
-    drawEventCard(ctx, W, 1040, '#D4AF37', '♥', 'Cérémonie', '19h00 — La Bella', '16 Rue de Pontault, 77680 Roissy-en-Brie')
+    drawEventCard(ctx, W, 1040, '#D4AF37', '♥', 'Cérémonie', '17h00 — La Bella', '16 Rue de Pontault, 77680 Roissy-en-Brie')
   } else {
-    drawEventCard(ctx, W, 760,  '#D4AF37', '♥', 'Cérémonie', '19h00 — La Bella', '16 Rue de Pontault, 77680 Roissy-en-Brie')
+    drawEventCard(ctx, W, 760,  '#D4AF37', '♥', 'Cérémonie', '17h00 — La Bella', '16 Rue de Pontault, 77680 Roissy-en-Brie')
   }
 
   // Footer

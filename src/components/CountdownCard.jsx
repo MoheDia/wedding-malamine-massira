@@ -29,7 +29,7 @@ export default function CountdownCard({ eventKey, icon, label, time, address, is
             : icon}
         </div>
         <div className="card-meta">
-          <div className="card-type">{isMairie ? 'Cérémonie civile' : 'Cérémonie'}</div>
+          <div className="card-type">{isMairie ? 'Cérémonie civile' : 'Célébration'}</div>
           <div className="card-name">{label}</div>
           <div className="card-time-loc">{time}</div>
         </div>

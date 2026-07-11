@@ -188,6 +188,11 @@ body {
 
 .card-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
 .card-icon { font-size:1.8rem; flex-shrink:0; }
+.card-icon-img {
+  width:52px; height:52px; object-fit:contain;
+  mix-blend-mode:multiply;
+  filter:sepia(1) saturate(3) hue-rotate(8deg) brightness(.75);
+}
 .card-meta { flex:1; }
 .card-type {
   font-size:.58rem; letter-spacing:.45em; text-transform:uppercase;

@@ -23,7 +23,11 @@ export default function CountdownCard({ eventKey, icon, label, time, address, is
   return (
     <div className={cls}>
       <div className="card-header">
-        <div className="card-icon">{icon}</div>
+        <div className="card-icon">
+          {typeof icon === 'string' && icon.startsWith('/')
+            ? <img src={icon} alt="" className="card-icon-img" />
+            : icon}
+        </div>
         <div className="card-meta">
           <div className="card-type">{isMairie ? 'Cérémonie civile' : 'Cérémonie'}</div>
           <div className="card-name">{label}</div>

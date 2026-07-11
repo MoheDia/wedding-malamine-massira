@@ -29,7 +29,7 @@ function CountdownPortal({ hasFull }) {
       {hasFull && (
         <CountdownCard
           eventKey="mairie"
-          icon="🌿"
+          icon="💍"
           label="Mariage Civil"
           time="14h30"
           address="Parc du Souvenir Emile Fouchard — 77500 Chelles"
@@ -38,7 +38,7 @@ function CountdownPortal({ hasFull }) {
       )}
       <CountdownCard
         eventKey="ceremony"
-        icon="💍"
+        icon="/images/dance.jpg"
         label="Cérémonie & Réception"
         time="17h00"
         address="La Bella — 16 Rue de Pontault, 77680 Roissy-en-Brie"

@@ -39,7 +39,7 @@ function CountdownPortal({ hasFull }) {
       <CountdownCard
         eventKey="ceremony"
         icon="/images/dance.jpg"
-        label="Cérémonie & Réception"
+        label="Célébration"
         time="17h00"
         address="La Bella — 16 Rue de Pontault, 77680 Roissy-en-Brie"
         isMairie={false}

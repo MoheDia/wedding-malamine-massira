@@ -39,7 +39,7 @@ export default function VenueSection({ hasFull }) {
           )}
 
           <div className="venue-card" ref={addRef}>
-            <div className="venue-event-tag">Cérémonie &amp; Réception</div>
+            <div className="venue-event-tag">Célébration</div>
             <div className="venue-time">17h00</div>
             <div className="venue-name-big">La Bella</div>
             <div className="venue-divider" />
